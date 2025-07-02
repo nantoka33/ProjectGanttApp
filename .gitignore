@@ -1,0 +1,41 @@
+# Build results
+bin/
+obj/
+*.exe
+*.dll
+*.pdb
+
+# User-specific files
+*.user
+*.suo
+
+# VS generated
+.vs/
+
+# SQLite DB
+*.db
+
+# Backup / temp files
+*.bak
+*.tmp
+*.log
+
+# Packages
+packages/
+
+
+# ビルド出力
+bin/
+obj/
+
+# VS設定
+.vs/
+*.user
+*.suo
+
+# SQLiteファイル（必要に応じて）
+*.db
+
+# その他
+*.log
+*.tmp
