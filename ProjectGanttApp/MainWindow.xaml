@@ -4,28 +4,67 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProjectGanttApp"
+        x:Name="MainWindow"
+        d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
         mc:Ignorable="d"
-       Title="プロジェクト管理" Height="500" Width="950">
-    <DockPanel>
-        <StackPanel Orientation="Horizontal" Margin="10" DockPanel.Dock="Top">
-            <Button Content="タスク追加" Click="AddTask_Click" Width="100" Margin="0,0,10,0" />
-            <CheckBox Content="完了以外を表示" IsChecked="{Binding ShowIncompleteOnly, Mode=TwoWay}" />
-        </StackPanel>
+        Title="プロジェクト管理" Height="500" Width="1000">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <DataGrid Grid.Column="0" ItemsSource="{Binding FilteredTasks}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" >
+
+            <DataGrid Grid.Column="0"
+                      ItemsSource="{Binding FilteredTasks}"
+                      AutoGenerateColumns="False"
+                      HeadersVisibility="Column"
+                      CanUserAddRows="False"
+                      IsReadOnly="False"
+                      RowHeight="30">
+
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="タスク名" Binding="{Binding Name}" Width="*" />
-                    <DataGridTextColumn Header="期限" Binding="{Binding EndDate, StringFormat='M/d'}" Width="60" />
-                    <DataGridTextColumn Header="ステータス" Binding="{Binding Status}" Width="80" />
+                    <DataGridTextColumn Header="タスク名"
+                                        Binding="{Binding Name, Mode=TwoWay}"
+                                        Width="140" />
+                    <DataGridTextColumn Header="期限"
+                                        Binding="{Binding EndDate, Mode=TwoWay, StringFormat='M/d'}"
+                                        Width="60" />
+
+                    <DataGridTemplateColumn Header="ステータス" Width="80">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Status}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <ComboBox ItemsSource="{Binding DataContext.TaskStatuses, RelativeSource={RelativeSource AncestorType=Window}}"
+                                          SelectedItem="{Binding Status, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
+
+
+
+                    <DataGridTemplateColumn Header="ガント" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Canvas Height="25">
+                                    <Rectangle Width="{Binding Path=., Converter={StaticResource GanttWidthConverter}}"
+                                               Height="20"
+                                               Fill="{Binding Status, Converter={StaticResource StatusToBrushConverter}}"
+                                               Canvas.Left="{Binding Path=., Converter={StaticResource GanttLeftConverter}}" />
+                                    <TextBlock Text="{Binding Status}"
+                                               Canvas.Left="3" Canvas.Top="3" FontSize="10"
+                                               Foreground="Black"/>
+                                </Canvas>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
                 </DataGrid.Columns>
             </DataGrid>
-            <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Auto">
-                <Canvas x:Name="GanttArea" Background="LightGray" Height="400" />
-            </ScrollViewer>
         </Grid>
-    </DockPanel>
+    </ScrollViewer>
 </Window>
