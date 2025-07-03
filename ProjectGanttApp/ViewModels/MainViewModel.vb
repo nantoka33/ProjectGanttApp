@@ -1,5 +1,6 @@
 ﻿Imports System.Collections.ObjectModel
 Imports System.ComponentModel
+Imports System.Runtime.CompilerServices
 
 Public Class MainViewModel
     Implements INotifyPropertyChanged
@@ -47,4 +48,20 @@ Public Class MainViewModel
         Tasks.Add(task)
         OnPropertyChanged(NameOf(FilteredTasks))
     End Sub
+
+    Protected Function SetProperty(Of T)(ByRef field As T, newValue As T, <CallerMemberName> Optional propertyName As String = Nothing) As Boolean
+        If Not Equals(field, newValue) Then
+            field = newValue
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
+            Return True
+        End If
+
+        Return False
+    End Function
+
+    Public ReadOnly Property TaskStatuses As Array
+        Get
+            Return [Enum].GetValues(GetType(TaskStatus))
+        End Get
+    End Property
 End Class
