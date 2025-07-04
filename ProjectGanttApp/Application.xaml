@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:ProjectGanttApp"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        <local:StatusToJapaneseConverter x:Key="StatusToJapaneseConverter" />
         <local:GanttWidthConverter x:Key="GanttWidthConverter"/>
         <local:GanttLeftConverter x:Key="GanttLeftConverter"/>
         <local:StatusToBrushConverter x:Key="StatusToBrushConverter"/>
