@@ -8,60 +8,54 @@ Public Class MainViewModel
     Public Property Tasks As ObservableCollection(Of TaskItem)
     Public Property Projects As ObservableCollection(Of ProjectItem)
 
-    Private _showIncompleteOnly As Boolean
-    Public Property ShowIncompleteOnly As Boolean
+    Private _startDate As Date = #2023/07/03#
+    Public Property StartDate As Date
         Get
-            Return _showIncompleteOnly
+            Return _startDate
         End Get
-        Set(value As Boolean)
-            _showIncompleteOnly = value
-            OnPropertyChanged(NameOf(ShowIncompleteOnly))
-            OnPropertyChanged(NameOf(FilteredTasks))
+        Set(value As Date)
+            If _startDate <> value Then
+                _startDate = value
+                OnPropertyChanged()
+                OnPropertyChanged(NameOf(DateTicks))
+            End If
         End Set
     End Property
 
-    Public ReadOnly Property FilteredTasks As IEnumerable(Of TaskItem)
+    Public ReadOnly Property DateTicks As List(Of Date)
         Get
-            If ShowIncompleteOnly Then
-                Return Tasks.Where(Function(t) t.Status <> TaskStatus.Completed)
-            Else
-                Return Tasks
-            End If
+            Dim result As New List(Of Date)
+            Dim current = StartDate
+            For i = 0 To 30
+                result.Add(current)
+                current = current.AddDays(1)
+            Next
+            Return result
         End Get
     End Property
-
-    Private dataService As New DataService()
-
-    Public Sub New()
-        Tasks = New ObservableCollection(Of TaskItem)(dataService.LoadTasks())
-        Projects = New ObservableCollection(Of ProjectItem)(dataService.LoadProjects())
-        ShowIncompleteOnly = False
-    End Sub
-
-    Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
-    Protected Sub OnPropertyChanged(prop As String)
-        RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(prop))
-    End Sub
-
-    Public Sub AddTask(task As TaskItem)
-        task.ID = Tasks.Count + 1
-        Tasks.Add(task)
-        OnPropertyChanged(NameOf(FilteredTasks))
-    End Sub
-
-    Protected Function SetProperty(Of T)(ByRef field As T, newValue As T, <CallerMemberName> Optional propertyName As String = Nothing) As Boolean
-        If Not Equals(field, newValue) Then
-            field = newValue
-            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
-            Return True
-        End If
-
-        Return False
-    End Function
 
     Public ReadOnly Property TaskStatuses As Array
         Get
             Return [Enum].GetValues(GetType(TaskStatus))
         End Get
     End Property
+
+    Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
+
+    Public Sub New()
+        Dim dataService As New DataService()
+        Tasks = New ObservableCollection(Of TaskItem)(dataService.LoadTasks())
+        Projects = New ObservableCollection(Of ProjectItem)(dataService.LoadProjects())
+    End Sub
+
+    Protected Sub OnPropertyChanged(<CallerMemberName> Optional prop As String = Nothing)
+        RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(prop))
+    End Sub
+
+    Public Sub AddTask(task As TaskItem)
+        task.ID = Tasks.Count + 1
+        Tasks.Add(task)
+        OnPropertyChanged(NameOf(Tasks))
+        OnPropertyChanged(NameOf(DateTicks))
+    End Sub
 End Class
