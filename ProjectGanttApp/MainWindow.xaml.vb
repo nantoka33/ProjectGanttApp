@@ -104,4 +104,10 @@ Class MainWindow
         DrawGanttBars()
     End Sub
 
+    Private Sub DateUpdateButton_Click(sender As Object, e As RoutedEventArgs)
+        StartDatePicker.SelectedDate = Date.Today
+        viewModel.StartDate = StartDatePicker.SelectedDate.Value
+        DrawDateTicks()
+        DrawGanttBars()
+    End Sub
 End Class
