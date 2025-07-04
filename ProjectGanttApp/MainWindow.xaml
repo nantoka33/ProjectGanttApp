@@ -10,23 +10,23 @@
 
     <DockPanel>
 
-        <!-- ✅ 基準日 -->
+        <!-- ✅ 基準日 + 更新ボタン -->
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10">
             <TextBlock Text="基準日:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-            <DatePicker x:Name="StartDatePicker" SelectedDate="{Binding StartDate, Mode=TwoWay}" />
+            <DatePicker x:Name="StartDatePicker" SelectedDate="{Binding StartDate, Mode=TwoWay}" Width="120"/>
+            <Button Content="更新" Width="60" Margin="10,0,0,0" Click="UpdateButton_Click"/>
         </StackPanel>
+
 
         <!-- ✅ メイン表示エリア -->
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="300"/>
-                    <!-- 左：DataGrid -->
                     <ColumnDefinition Width="*" />
-                    <!-- 右：日付 + ガント -->
                 </Grid.ColumnDefinitions>
 
-                <!-- 左：タスクリスト -->
+                <!-- ✅ タスクリスト -->
                 <DataGrid Grid.Column="0"
                           ItemsSource="{Binding Tasks}"
                           AutoGenerateColumns="False"
@@ -39,32 +39,36 @@
                         <DataGridTextColumn Header="タスク名" Binding="{Binding Name}" Width="140"/>
                         <DataGridTextColumn Header="開始日" Binding="{Binding StartDate, StringFormat='M/d'}" Width="80"/>
                         <DataGridTextColumn Header="期限" Binding="{Binding EndDate, StringFormat='M/d'}" Width="80"/>
-                        <DataGridTextColumn Header="ステータス" Binding="{Binding Status}" Width="100"/>
+                        <DataGridTextColumn Header="ステータス" Binding="{Binding Status, Converter={StaticResource StatusToJapaneseConverter}}" Width="100"/>
                     </DataGrid.Columns>
                 </DataGrid>
 
-                <!-- 右：ガントエリア -->
-                <Grid Grid.Column="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
-                        <!-- 日付目盛り -->
-                        <RowDefinition Height="*" />
-                        <!-- ガントバー -->
-                    </Grid.RowDefinitions>
+                <!-- ✅ ガントチャート＋目盛 -->
+                <ScrollViewer Grid.Column="1"
+                              HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Disabled"
+                              x:Name="GanttScrollViewer">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
 
-                    <!-- ✅ 日付目盛り -->
-                    <Canvas x:Name="TickCanvas"
-                            Grid.Row="0"
-                            Background="WhiteSmoke"
-                            Height="30"/>
+                        <!-- ✅ 日付目盛り -->
+                        <Canvas x:Name="TickCanvas"
+                                Grid.Row="0"
+                                Height="30"
+                                Background="WhiteSmoke"/>
 
-                    <!-- ✅ ガントチャート -->
-                    <Canvas x:Name="GanttCanvas"
-                            Grid.Row="1"
-                            Background="#f8f8f8"/>
-                </Grid>
+                        <!-- ✅ ガントバー -->
+                        <Canvas x:Name="GanttCanvas"
+                                Grid.Row="1"
+                                Background="#f8f8f8"
+                                VerticalAlignment="Top"/>
+
+                    </Grid>
+                </ScrollViewer>
             </Grid>
         </ScrollViewer>
-
     </DockPanel>
 </Window>
