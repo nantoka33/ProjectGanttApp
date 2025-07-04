@@ -8,7 +8,7 @@ Public Class MainViewModel
     Public Property Tasks As ObservableCollection(Of TaskItem)
     Public Property Projects As ObservableCollection(Of ProjectItem)
 
-    Private _startDate As Date = #2023/07/03#
+    Private _startDate As Date = #2025/07/03#
     Public Property StartDate As Date
         Get
             Return _startDate

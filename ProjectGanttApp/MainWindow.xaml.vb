@@ -30,18 +30,18 @@ Class MainWindow
 
         For Each dt As Date In viewModel.DateTicks
             Dim border As New Border With {
-            .Width = DayWidth,
-            .Height = 30,
-            .BorderBrush = Brushes.Gray,
-            .BorderThickness = New Thickness(0.5)
-        }
+                .Width = DayWidth,
+                .Height = 30,
+                .BorderBrush = Brushes.Gray,
+                .BorderThickness = New Thickness(0.5)
+            }
 
             Dim label As New TextBlock With {
-            .Text = dt.ToString("M/d"),
-            .FontSize = 10,
-            .HorizontalAlignment = HorizontalAlignment.Center,
-            .VerticalAlignment = VerticalAlignment.Center
-        }
+                .Text = dt.ToString("M/d"),
+                .FontSize = 10,
+                .HorizontalAlignment = HorizontalAlignment.Center,
+                .VerticalAlignment = VerticalAlignment.Center
+            }
 
             border.Child = label
             Canvas.SetLeft(border, left)
@@ -50,7 +50,6 @@ Class MainWindow
             left += DayWidth
         Next
     End Sub
-
 
     Private Sub DrawGanttBars()
         If GanttCanvas Is Nothing Then Return
@@ -99,4 +98,10 @@ Class MainWindow
 
         GanttCanvas.Height = RowHeight * tasks.Count
     End Sub
+
+    Private Sub UpdateButton_Click(sender As Object, e As RoutedEventArgs)
+        DrawDateTicks()
+        DrawGanttBars()
+    End Sub
+
 End Class
