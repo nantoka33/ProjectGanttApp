@@ -10,7 +10,7 @@
 
     <DockPanel>
 
-        <!-- ✅ 基準日 + 更新ボタン -->
+        <!-- 基準日、更新 -->
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10">
             <TextBlock Text="基準日:" VerticalAlignment="Center" Margin="0,0,5,0"/>
             <DatePicker x:Name="StartDatePicker" SelectedDate="{Binding StartDate, Mode=TwoWay}" Width="120"/>
@@ -19,7 +19,7 @@
         </StackPanel>
 
 
-        <!-- ✅ メイン表示エリア -->
+        <!-- メイン表示エリア -->
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -27,7 +27,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <!-- ✅ タスクリスト -->
+                <!-- タスクリスト -->
                 <DataGrid Grid.Column="0"
                           ItemsSource="{Binding Tasks}"
                           AutoGenerateColumns="False"
@@ -44,7 +44,7 @@
                     </DataGrid.Columns>
                 </DataGrid>
 
-                <!-- ✅ ガントチャート＋目盛 -->
+                <!-- ガントチャート、目盛 -->
                 <ScrollViewer Grid.Column="1"
                               HorizontalScrollBarVisibility="Auto"
                               VerticalScrollBarVisibility="Disabled"
@@ -55,13 +55,13 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
-                        <!-- ✅ 日付目盛り -->
+                        <!-- 日付目盛り -->
                         <Canvas x:Name="TickCanvas"
                                 Grid.Row="0"
                                 Height="30"
                                 Background="WhiteSmoke"/>
 
-                        <!-- ✅ ガントバー -->
+                        <!-- ガントチャート -->
                         <Canvas x:Name="GanttCanvas"
                                 Grid.Row="1"
                                 Background="#f8f8f8"
