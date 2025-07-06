@@ -100,6 +100,7 @@ Class MainWindow
     End Sub
 
     Private Sub UpdateButton_Click(sender As Object, e As RoutedEventArgs)
+        viewModel.SaveAllTasks()
         DrawDateTicks()
         DrawGanttBars()
     End Sub
@@ -107,6 +108,19 @@ Class MainWindow
     Private Sub DateUpdateButton_Click(sender As Object, e As RoutedEventArgs)
         StartDatePicker.SelectedDate = Date.Today
         viewModel.StartDate = StartDatePicker.SelectedDate.Value
+        DrawDateTicks()
+        DrawGanttBars()
+    End Sub
+
+    Private Sub AddTaskButton_Click(sender As Object, e As RoutedEventArgs)
+        Dim newTask = New TaskItem With {
+                                        .Name = NewTaskNameTextBox.Text.Trim(),
+                                        .StartDate = Date.Today,
+                                        .EndDate = EndDatePicker.SelectedDate.Value,
+                                        .Status = TaskStatus.NotStarted,
+                                        .ProjectID = Guid.NewGuid()
+                                    }
+        viewModel.AddTask(newTask)
         DrawDateTicks()
         DrawGanttBars()
     End Sub

@@ -9,6 +9,6 @@ Public Class TaskItem
     Public Property Name As String
     Public Property StartDate As Date
     Public Property EndDate As Date
-    Public Property ProjectID As Integer
+    Public Property ProjectID As Guid
     Public Property Status As TaskStatus = TaskStatus.NotStarted
 End Class
